@@ -118,10 +118,23 @@ class _WebQrViewState extends State<WebQrView> {
     }
 
     try {
-      var constraints = UserMediaOptions(
-          video: VideoOptions(
-        facingMode: (facing == CameraFacing.front ? 'user' : 'environment'),
-      ));
+      List<dynamic> devices =
+          (await enumerateDevices().toDart) as List<dynamic>;
+      List<dynamic> backCameras = devices
+          .where((device) =>
+              device.kind == 'videoinput' &&
+              device.label.toLowerCase().contains('back'))
+          .toList();
+      UserMediaOptions constraints;
+      if (backCameras.isEmpty) {
+        constraints =
+            UserMediaOptions(video: VideoOptions(facingMode: "environment"));
+      } else {
+        constraints = UserMediaOptions(
+            video: VideoOptions(
+          deviceId: DeviceIdOptions(exact: "${backCameras.last.deviceId}"),
+        ));
+      }
       // dart style, not working properly:
       // var stream =
       //     await html.window.navigator.mediaDevices.getUserMedia(constraints);
