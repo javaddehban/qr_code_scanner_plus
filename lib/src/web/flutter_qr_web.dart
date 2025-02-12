@@ -132,7 +132,7 @@ class _WebQrViewState extends State<WebQrView> {
       } else {
         constraints = UserMediaOptions(
             video: VideoOptions(
-          deviceId: DeviceIdOptions(exact: "${backCameras.last.deviceId}"),
+          deviceId: DeviceIdOptions(exact: "${backCameras[backCameras.length -1].deviceId}"),
         ));
       }
       // dart style, not working properly:
